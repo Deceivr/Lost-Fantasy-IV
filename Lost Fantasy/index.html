@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>Lost Fantasy IV </title>
+    <title>Lost Fantasy IV · Archivo</title>
     <style>
         /* ===== RESET Y AMBIENTE FANTÁSTICO ===== */
         * {
@@ -32,7 +32,7 @@
             justify-content: space-between;
             padding: 20px 0 15px;
             border-bottom: 4px double #b89e6b;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             box-shadow: 0 8px 12px -6px #0a0704;
             background: linear-gradient(to right, #241f14, #2f281b);
             border-image: repeating-linear-gradient(45deg, #b89e6b, #4a3e28 10px) 30;
@@ -87,12 +87,64 @@
             backdrop-filter: blur(1px);
         }
 
+        /* ===== FILTROS ===== */
+        .filtros-reinos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin: 20px 0 25px;
+            padding: 15px 20px;
+            background: #241f13cc;
+            border-left: 8px solid #b89e6b;
+            border-radius: 0 40px 40px 0;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 4px 12px #00000080;
+        }
+        .filtros-reinos span {
+            font-weight: bold;
+            color: #efdba8;
+            margin-right: 10px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            font-family: 'Cinzel', serif;
+        }
+        .btn-reino {
+            background: #2f281b;
+            border: 1px solid #7d6a42;
+            color: #ecd8b4;
+            padding: 10px 28px;
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: inset 0 1px 4px #0f0d07, 0 3px 4px black;
+            letter-spacing: 1.5px;
+        }
+        .btn-reino:hover {
+            background: #4f3f28;
+            border-color: #e9cf8b;
+            color: #fff2cf;
+            box-shadow: 0 0 12px #e9cf8b;
+        }
+        .btn-reino.activo {
+            background: #8f7a47;
+            border-color: #f5dd9e;
+            color: #17130b;
+            font-weight: 900;
+            box-shadow: 0 0 16px #cfb47c, inset 0 2px 6px #4a3a1e;
+        }
+
         /* ===== TABLÓN DE CRÓNICAS ===== */
         .tablon {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 35px 25px;
-            margin: 35px 0 20px;
+            margin: 25px 0 20px;
         }
 
         .pergamino {
@@ -116,7 +168,7 @@
 
         .imagen-cronica {
             width: 100%;
-            height: 190px;
+            height: 200px; /* ligeramente más grande para dar énfasis */
             object-fit: cover;
             border-bottom: 4px solid #8f7b4d;
             display: block;
@@ -200,12 +252,14 @@
             text-shadow: 0 0 10px #41361b;
             line-height: 1;
             transition: 0.2s;
+            z-index: 1100;
         }
         .cerrar-camara:hover {
             color: #ffecb3;
             transform: scale(1.3) rotate(90deg);
         }
 
+        /* Estilos base de la imagen en modal (para noticias) */
         .modal-imagen {
             width: 100%;
             max-height: 280px;
@@ -214,6 +268,55 @@
             margin-bottom: 20px;
             border-radius: 12px;
             box-shadow: 0 0 15px #0e0b05;
+            transition: all 0.2s;
+        }
+
+        /* Estilos específicos para Razas: imagen en miniatura en esquina */
+        .camara-modal.modal-raza .modal-imagen {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            border: 3px solid #b89e6b;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px black;
+            margin: 0;
+            z-index: 1050;
+        }
+
+        /* Ajustar el contenido para que no se superponga a la imagen en razas */
+        .camara-modal.modal-raza .camara-contenido {
+            padding-top: 40px; /* más espacio arriba */
+        }
+
+        .camara-modal.modal-raza .modal-titular {
+            padding-right: 160px; /* evitar que el título choque con la imagen */
+        }
+
+        .camara-modal.modal-raza .modal-fecha {
+            margin-right: 160px;
+        }
+
+        .camara-modal.modal-raza .modal-cronica {
+            clear: both;
+        }
+
+        /* Responsive: si la pantalla es pequeña, la miniatura se recoloca */
+        @media (max-width: 600px) {
+            .camara-modal.modal-raza .modal-imagen {
+                position: static;
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                margin-bottom: 15px;
+                float: none;
+            }
+            .camara-modal.modal-raza .modal-titular,
+            .camara-modal.modal-raza .modal-fecha {
+                padding-right: 0;
+            }
         }
 
         .modal-titular {
@@ -299,13 +402,19 @@
         <div class="emblema-escudo" style="font-size: 3rem; line-height: 1;">⚔️🛡️</div>
         <div class="emblema-texto">
             <div class="linea-superior">Lost Fantasy IV</div>
-            <div class="linea-inferior">CRÓNICAS</div>
+            <div class="linea-inferior">ARCHIVO</div>
         </div>
     </div>
     <div class="insignia-cronista">
-        <span>✧ ARCHIVO DEL MUNDO ✧</span>
+        <span>✧ DECEIVER ✧</span>
     </div>
 </header>
+
+<!-- ========== FILTROS ========== -->
+<div class="filtros-reinos" id="panelFiltros">
+    <span>🗺️ EXPLORAR:</span>
+    <!-- Botones generados dinámicamente -->
+</div>
 
 <!-- ========== TABLÓN DE CRÓNICAS ========== -->
 <main id="tablonCronicas" class="tablon">
@@ -324,17 +433,29 @@
 </div>
 
 <footer class="pie-forja">
-    <span>🏰 LOST FANTASY IV · CRONICAS LOS REINOS</span><br>
-    <span style="font-size: 0.8rem;">❄️ Cortecía de Deceiver ❄️</span>
+    <span>🏰 LOST FANTASY IV · CRÓNICAS DE LOS REINOS</span><br>
+    <span style="font-size: 0.8rem;">❄️ Cortesía de Deceiver ❄️</span>
 </footer>
 
 <script>
-    const cronicas = [
+    // ==================== DATOS CON CATEGORÍA ====================
+    const noticias = [
         {
-            titular: "EN CONSTRUCCIÓN: PAGINA WEB ACTUALMENTE EN CONSTRUCCIÓN",
+            titular: "EN CONSTRUCCIÓN: PAGINA WEB ACTUALMENTE EN PREPARACIÓN",
             mesAno: "??/??/????",
-            contexto: "La pagina web se encuentra en preparación para la apertura del rol, en cuanto esté lista se le informará por el grupo destiado a esto para q vean la actualización de la misma",
-            imagen: "https://i.pinimg.com/1200x/58/99/88/58998898c1e9e14941e0899884fb3f00.jpg"
+            contexto: "La página web se encuentra en preparación para la apertura del rol. En cuanto esté lista se informará por el grupo destinado a esto para que vean la actualización de la misma.",
+            imagen: "https://i.pinimg.com/1200x/58/99/88/58998898c1e9e14941e0899884fb3f00.jpg",
+            categoria: "noticia"
+        }
+    ];
+
+    const razas = [
+        {
+            titular: "PROXIMAMENTE",
+            mesAno: "???????",
+            contexto: "PROXIMAMENTE",
+            imagen: "https://i.pinimg.com/736x/23/30/a1/2330a15394e1817185515ee53432f954.jpg",
+            categoria: "raza"
         }
     ];
 
@@ -346,44 +467,81 @@
     const modalFecha = document.getElementById('modalFecha');
     const modalContexto = document.getElementById('modalContexto');
     const cerrarModal = document.getElementById('cerrarModalBtn');
+    const panelFiltros = document.getElementById('panelFiltros');
 
-    // Renderizar todas las crónicas sin filtros (todas visibles)
+    // Estado del filtro: 'noticias' o 'razas'
+    let filtroActivo = 'noticias';
+
+    // Función para generar botones de filtro
+    function generarBotonesFiltro() {
+        const opciones = [
+            { id: 'noticias', nombre: '📰 NOTICIAS' },
+            { id: 'razas', nombre: '🗿 RAZAS' }
+        ];
+
+        panelFiltros.innerHTML = '<span>🗺️ EXPLORAR:</span>';
+
+        opciones.forEach(opcion => {
+            const boton = document.createElement('button');
+            boton.className = 'btn-reino';
+            boton.textContent = opcion.nombre;
+            if (filtroActivo === opcion.id) {
+                boton.classList.add('activo');
+            }
+            boton.addEventListener('click', () => {
+                if (filtroActivo === opcion.id) return;
+                filtroActivo = opcion.id;
+                document.querySelectorAll('.btn-reino').forEach(btn => btn.classList.remove('activo'));
+                boton.classList.add('activo');
+                renderizarCronicas();
+            });
+            panelFiltros.appendChild(boton);
+        });
+    }
+
+    // Renderiza según el filtro activo
     function renderizarCronicas() {
+        const datos = filtroActivo === 'noticias' ? noticias : razas;
+
         tablon.innerHTML = '';
 
-        if (cronicas.length === 0) {
+        if (datos.length === 0) {
             tablon.innerHTML = '<div class="sin-cronicas">📜 No hay crónicas que relatar... el cuervo mensajero aún no llega.</div>';
             return;
         }
 
-        cronicas.forEach((cronica, index) => {
+        datos.forEach((item) => {
             const tarjeta = document.createElement('article');
             tarjeta.className = 'pergamino';
-            // Opcional: guardar índice original (no usado para filtros)
-            tarjeta.setAttribute('data-id', index);
 
             tarjeta.innerHTML = `
-                <img class="imagen-cronica" src="${cronica.imagen}" alt="Visión de ${cronica.titular}" loading="lazy" onerror="this.onerror=null; this.src='https://picsum.photos/400/200?random=${index+100}';">
+                <img class="imagen-cronica" src="${item.imagen}" alt="${item.titular}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2e281c/cfa668?text=Imagen+perdida';">
                 <div class="cuerpo-pergamino">
-                    <h2 class="titulo-cronica">${cronica.titular}</h2>
-                    <span class="fecha-cronica">${cronica.mesAno}</span>
+                    <h2 class="titulo-cronica">${item.titular}</h2>
+                    <span class="fecha-cronica">${item.mesAno}</span>
                 </div>
             `;
 
-            tarjeta.addEventListener('click', function() {
-                abrirModal(cronica);
-            });
-
+            tarjeta.addEventListener('click', () => abrirModal(item));
             tablon.appendChild(tarjeta);
         });
     }
 
-    function abrirModal(cronica) {
-        modalImg.src = cronica.imagen;
-        modalImg.alt = cronica.titular;
-        modalTitular.textContent = cronica.titular;
-        modalFecha.textContent = cronica.mesAno;
-        modalContexto.textContent = cronica.contexto;
+    function abrirModal(item) {
+        // Asignar contenido
+        modalImg.src = item.imagen;
+        modalImg.alt = item.titular;
+        modalTitular.textContent = item.titular;
+        modalFecha.textContent = item.mesAno;
+        modalContexto.textContent = item.contexto;
+
+        // Aplicar clase especial si es raza
+        if (item.categoria === 'raza') {
+            modal.classList.add('modal-raza');
+        } else {
+            modal.classList.remove('modal-raza');
+        }
+
         modal.style.display = 'flex';
     }
 
@@ -393,23 +551,23 @@
 
     // Event listeners
     cerrarModal.addEventListener('click', cerrarModalFunc);
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', (e) => {
         if (e.target === modal) {
             cerrarModalFunc();
         }
     });
 
-    // Evitar scroll del body cuando el modal está abierto (opcional)
+    // Evitar scroll del body cuando el modal está abierto
     modal.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
 
-    // Iniciar
+    // Inicializar
+    generarBotonesFiltro();
     renderizarCronicas();
 </script>
 
-<!-- Soporte para imágenes de reemplazo si alguna falla (script mínimo) -->
+<!-- Soporte para imágenes de reemplazo si alguna falla -->
 <script>
     (function() {
-        // Si alguna imagen de picsum falla, la reemplazamos con un placehold con temática
         const imagenes = document.querySelectorAll('img');
         imagenes.forEach(img => {
             img.addEventListener('error', function() {
