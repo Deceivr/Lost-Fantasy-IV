@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>Lost Fantasy IV · Archivo</title>
+    <style>
+        /* ===== RESET Y AMBIENTE FANTÁSTICO ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a150e;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(180, 150, 80, 0.08) 0%, transparent 25%),
+                repeating-linear-gradient(45deg, rgba(100, 80, 40, 0.05) 0px, rgba(100, 80, 40, 0.05) 2px, transparent 2px, transparent 6px);
+            font-family: 'Palatino', 'Georgia', 'Times New Roman', serif;
+            color: #ecd8b4;
+            line-height: 1.5;
+            padding: 0 20px 40px;
+            min-height: 100vh;
+        }
+
+        /* ===== ENCABEZADO CON AURA ÉPICA ===== */
+        .ciudadela {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0 15px;
+            border-bottom: 4px double #b89e6b;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 12px -6px #0a0704;
+            background: linear-gradient(to right, #241f14, #2f281b);
+            border-image: repeating-linear-gradient(45deg, #b89e6b, #4a3e28 10px) 30;
+        }
+
+        .emblema {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .emblema-escudo {
+            height: 70px;
+            width: auto;
+            filter: drop-shadow(0 0 6px #e9c47e);
+            transition: transform 0.3s ease;
+        }
+        .emblema-escudo:hover {
+            transform: scale(1.1) rotate(-2deg);
+        }
+
+        .emblema-texto {
+            font-family: 'Cinzel', 'Georgia', serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .emblema-texto .linea-superior {
+            font-size: 2.2rem;
+            color: #efd49e;
+            text-shadow: 3px 3px 0 #3f321e, 5px 5px 0 #00000080;
+            line-height: 1.1;
+        }
+        .emblema-texto .linea-inferior {
+            font-size: 0.9rem;
+            color: #c9b27c;
+            letter-spacing: 6px;
+            border-top: 1px solid #7a653a;
+            padding-top: 6px;
+            font-style: italic;
+        }
+
+        .insignia-cronista {
+            font-size: 1rem;
+            color: #e4cca3;
+            border: 1px solid #7a653a;
+            padding: 8px 20px;
+            background: #2b2318;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: inset 0 0 10px #221d12, 0 2px 4px black;
+            font-family: 'Cinzel', serif;
+            backdrop-filter: blur(1px);
+        }
+
+        /* ===== FILTROS ===== */
+        .filtros-reinos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin: 20px 0 25px;
+            padding: 15px 20px;
+            background: #241f13cc;
+            border-left: 8px solid #b89e6b;
+            border-radius: 0 40px 40px 0;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 4px 12px #00000080;
+        }
+        .filtros-reinos span {
+            font-weight: bold;
+            color: #efdba8;
+            margin-right: 10px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            font-family: 'Cinzel', serif;
+        }
+        .btn-reino {
+            background: #2f281b;
+            border: 1px solid #7d6a42;
+            color: #ecd8b4;
+            padding: 10px 28px;
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: inset 0 1px 4px #0f0d07, 0 3px 4px black;
+            letter-spacing: 1.5px;
+        }
+        .btn-reino:hover {
+            background: #4f3f28;
+            border-color: #e9cf8b;
+            color: #fff2cf;
+            box-shadow: 0 0 12px #e9cf8b;
+        }
+        .btn-reino.activo {
+            background: #8f7a47;
+            border-color: #f5dd9e;
+            color: #17130b;
+            font-weight: 900;
+            box-shadow: 0 0 16px #cfb47c, inset 0 2px 6px #4a3a1e;
+        }
+
+        /* ===== TABLÓN DE CRÓNICAS ===== */
+        .tablon {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 35px 25px;
+            margin: 25px 0 20px;
+        }
+
+        .pergamino {
+            background: #231f14;
+            background: linear-gradient(150deg, #2b251a 0%, #1e1911 95%);
+            border: 2px solid #6b5b3c;
+            border-radius: 18px 4px 18px 4px;
+            overflow: hidden;
+            box-shadow: 10px 12px 15px rgba(0,0,0,0.7), inset 0 0 0 1px #dbb47140;
+            transition: transform 0.25s, box-shadow 0.3s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+        }
+        .pergamino:hover {
+            transform: translateY(-8px) rotate(0.5deg);
+            box-shadow: 15px 18px 25px black, inset 0 0 0 2px #cfb37c;
+            border-color: #cfb37c;
+        }
+
+        .imagen-cronica {
+            width: 100%;
+            height: 200px; /* ligeramente más grande para dar énfasis */
+            object-fit: cover;
+            border-bottom: 4px solid #8f7b4d;
+            display: block;
+            background-color: #3f341f;
+            transition: filter 0.3s;
+        }
+        .pergamino:hover .imagen-cronica {
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        .cuerpo-pergamino {
+            padding: 22px 18px 20px;
+        }
+
+        .titulo-cronica {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Cinzel', 'Georgia', serif;
+            color: #f7e2b5;
+            line-height: 1.25;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0 #241f0e;
+            letter-spacing: 0.3px;
+        }
+
+        .fecha-cronica {
+            font-size: 0.95rem;
+            color: #e6cf93;
+            background: #332c1b;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            border: 1px solid #b6984b;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            margin-top: 10px;
+            font-family: 'Palatino', serif;
+            box-shadow: inset 0 1px 3px #0f0d07;
+        }
+
+        /* ===== CÁMARA DE LOS SUCESOS (MODAL) ===== */
+        .camara-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 5, 2, 0.95);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .camara-contenido {
+            background: #241f13;
+            border: 6px double #ab8f54;
+            border-radius: 24px 8px 24px 8px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 35px 30px;
+            box-shadow: 0 0 50px #221a0b, inset 0 0 0 2px #685e3a;
+            position: relative;
+            color: #efe3c6;
+        }
+
+        .cerrar-camara {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 2.5rem;
+            color: #cfb47c;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-weight: bold;
+            text-shadow: 0 0 10px #41361b;
+            line-height: 1;
+            transition: 0.2s;
+            z-index: 1100;
+        }
+        .cerrar-camara:hover {
+            color: #ffecb3;
+            transform: scale(1.3) rotate(90deg);
+        }
+
+        /* Estilos base de la imagen en modal (para noticias) */
+        .modal-imagen {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border: 4px solid #7d6a40;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #0e0b05;
+            transition: all 0.2s;
+        }
+
+        /* Estilos específicos para Razas: imagen en miniatura en esquina */
+        .camara-modal.modal-raza .modal-imagen {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            border: 3px solid #b89e6b;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px black;
+            margin: 0;
+            z-index: 1050;
+        }
+
+        /* Ajustar el contenido para que no se superponga a la imagen en razas */
+        .camara-modal.modal-raza .camara-contenido {
+            padding-top: 40px; /* más espacio arriba */
+        }
+
+        .camara-modal.modal-raza .modal-titular {
+            padding-right: 160px; /* evitar que el título choque con la imagen */
+        }
+
+        .camara-modal.modal-raza .modal-fecha {
+            margin-right: 160px;
+        }
+
+        .camara-modal.modal-raza .modal-cronica {
+            clear: both;
+        }
+
+        /* Responsive: si la pantalla es pequeña, la miniatura se recoloca */
+        @media (max-width: 600px) {
+            .camara-modal.modal-raza .modal-imagen {
+                position: static;
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                margin-bottom: 15px;
+                float: none;
+            }
+            .camara-modal.modal-raza .modal-titular,
+            .camara-modal.modal-raza .modal-fecha {
+                padding-right: 0;
+            }
+        }
+
+        .modal-titular {
+            font-size: 2.1rem;
+            font-family: 'Cinzel', serif;
+            color: #f3d98f;
+            border-left: 12px solid #9e874f;
+            padding-left: 25px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 0 #1c160b;
+        }
+
+        .modal-fecha {
+            font-size: 1.2rem;
+            color: #e9d594;
+            background: #2d281b;
+            display: inline-block;
+            padding: 7px 30px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            border: 1px solid #b69646;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-family: 'Palatino', serif;
+        }
+
+        .modal-cronica {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            background: #1d180ecc;
+            padding: 25px 30px;
+            border-radius: 24px 4px 24px 4px;
+            border-left: 8px solid #7e6d39;
+            margin-top: 15px;
+            color: #f5efda;
+            font-family: 'Palatino', 'Georgia', serif;
+            white-space: pre-line;
+            box-shadow: inset 0 0 10px #100e07;
+        }
+
+        /* ===== PIE DE ÉPOCA ===== */
+        .pie-forja {
+            margin-top: 60px;
+            padding: 25px 0 15px;
+            text-align: center;
+            border-top: 2px solid #65573b;
+            color: #ab9a6f;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            font-style: italic;
+        }
+
+        .sin-cronicas {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 70px 30px;
+            background: #201e14;
+            border: 2px dashed #9b894b;
+            font-size: 1.8rem;
+            color: #ccbb83;
+            border-radius: 30px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* ===== SCROLL DECORADO ===== */
+        ::-webkit-scrollbar {
+            width: 12px;
+            background: #1e1a10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #78693e;
+            border-radius: 20px;
+            border: 2px solid #2a2417;
+        }
+    </style>
+</head>
+<body>
+
+<header class="ciudadela">
+    <div class="emblema">
+        <!-- Escudo imaginario (texto decorado en lugar de imagen rota) -->
+        <div class="emblema-escudo" style="font-size: 3rem; line-height: 1;">⚔️🛡️</div>
+        <div class="emblema-texto">
+            <div class="linea-superior">Lost Fantasy IV</div>
+            <div class="linea-inferior">ARCHIVO</div>
+        </div>
+    </div>
+    <div class="insignia-cronista">
+        <span>✧ DECEIVER ✧</span>
+    </div>
+</header>
+
+<!-- ========== FILTROS ========== -->
+<div class="filtros-reinos" id="panelFiltros">
+    <span>🗺️ EXPLORAR:</span>
+    <!-- Botones generados dinámicamente -->
+</div>
+
+<!-- ========== TABLÓN DE CRÓNICAS ========== -->
+<main id="tablonCronicas" class="tablon">
+    <!-- las tarjetas se inyectan aquí -->
+</main>
+
+<!-- ========== CÁMARA MODAL (SUCESO COMPLETO) ========== -->
+<div id="modalCronica" class="camara-modal">
+    <div class="camara-contenido">
+        <button id="cerrarModalBtn" class="cerrar-camara">&times;</button>
+        <img id="modalImg" class="modal-imagen" src="" alt="Grabado de la crónica">
+        <h2 id="modalTitular" class="modal-titular"></h2>
+        <span id="modalFecha" class="modal-fecha"></span>
+        <div id="modalContexto" class="modal-cronica"></div>
+    </div>
+</div>
+
+<footer class="pie-forja">
+    <span>🏰 LOST FANTASY IV · CRÓNICAS DE LOS REINOS</span><br>
+    <span style="font-size: 0.8rem;">❄️ Cortesía de Deceiver ❄️</span>
+</footer>
+
+<script>
+    // ==================== DATOS CON CATEGORÍA ====================
+    const noticias = [
+        {
+            titular: "EN CONSTRUCCIÓN: PAGINA WEB ACTUALMENTE EN PREPARACIÓN",
+            mesAno: "??/??/????",
+            contexto: "La página web se encuentra en preparación para la apertura del rol. En cuanto esté lista se informará por el grupo destinado a esto para que vean la actualización de la misma.",
+            imagen: "https://i.pinimg.com/1200x/58/99/88/58998898c1e9e14941e0899884fb3f00.jpg",
+            categoria: "noticia"
+        },
+        {
+            titular: "EL CONSEJO DE ERYNDOR CONVOCA A LOS REINOS",
+            mesAno: "Luna de la Alianza, 1245",
+            contexto: "Mensajeros han partido hacia todos los rincones del continente. El Gran Consejo solicita una reunión urgente para tratar el resurgimiento de las hordas de Morgrath. Se espera la llegada de embajadores de Valdoria, Khazâd y los clanes del este.",
+            imagen: "https://picsum.photos/id/1043/400/200",
+            categoria: "noticia"
+        },
+        {
+            titular: "AVISTAMIENTO DE DRAGONES EN LAS MONTAÑAS HUMANTES",
+            mesAno: "Luna del Dragón, 1245",
+            contexto: "Pastores y mineros juran haber visto una silueta alada de proporciones colosales. Los dragones no se dejaban ver desde la Era de los Cielos de Fuego. Los eruditos discuten si es un presagio de esperanza o de destrucción.",
+            imagen: "https://picsum.photos/id/110/400/200",
+            categoria: "noticia"
+        }
+    ];
+
+    const razas = [
+        {
+            titular: "HUMANOS · REINOS DEL HOMBRE",
+            mesAno: "Hijos del Alba",
+            contexto: "Los humanos son la raza más joven pero también la más adaptable y numerosa. Habitan en los reinos de Valdoria, Zahir y las ciudades libres. Su corta vida los impulsa a lograr grandes gestas, y su ambición los ha llevado a dominar el comercio, la guerra y la magia. No poseen dones naturales excepcionales, pero su versatilidad y tenacidad los convierten en una fuerza imparable cuando se unen.",
+            imagen: "https://picsum.photos/id/1043/400/200?random=1",
+            categoria: "raza"
+        },
+        {
+            titular: "ELFOS SYLVAN · GUARDIANES DEL BOSQUE",
+            mesAno: "Primogénitos",
+            contexto: "Los elfos sylvan, también llamados elfos del bosque, habitan en las profundidades de los grandes bosques de Eryndor. Son longevos, de figura esbelta y orejas puntiagudas. Su conexión con la naturaleza les otorga habilidades mágicas relacionadas con las plantas y los animales. Son reservados, pero han forjado alianzas con enanos y humanos cuando la amenaza es común.",
+            imagen: "https://picsum.photos/id/1015/400/200?random=2",
+            categoria: "raza"
+        },
+        {
+            titular: "ENANOS DE KHAZÂD · SEÑORES DE LA PIEDRA",
+            mesAno: "Hijos del Martillo",
+            contexto: "Los enanos son una raza robusta y barbuda, maestros de la minería y la forja. Viven en enormes fortalezas excavadas en las montañas. Su sociedad se organiza en clanes liderados por un Gran Rey. Son desconfiados con la magia, pero veneran a sus ancestros y dominan la creación de armas y armaduras de calidad legendaria. Su rencor contra los orcos es eterno.",
+            imagen: "https://picsum.photos/id/113/400/200?random=3",
+            categoria: "raza"
+        },
+        {
+            titular: "ORCOS · LEGIONES DE MORGRATH",
+            mesAno: "Criados del Caos",
+            contexto: "Los orcos son una raza guerrera creada por los antiguos señores oscuros para la guerra. Son fuertes, resistentes y viven en tribus que constantemente luchan entre sí. Sin embargo, bajo el mando del Imperio Oscuro de Morgrath, se han unificado en legiones temibles. Son temidos por su ferocidad y su capacidad de resistir heridas mortales.",
+            imagen: "https://picsum.photos/id/106/400/200?random=4",
+            categoria: "raza"
+        }
+    ];
+
+    // Elementos del DOM
+    const tablon = document.getElementById('tablonCronicas');
+    const modal = document.getElementById('modalCronica');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitular = document.getElementById('modalTitular');
+    const modalFecha = document.getElementById('modalFecha');
+    const modalContexto = document.getElementById('modalContexto');
+    const cerrarModal = document.getElementById('cerrarModalBtn');
+    const panelFiltros = document.getElementById('panelFiltros');
+
+    // Estado del filtro: 'noticias' o 'razas'
+    let filtroActivo = 'noticias';
+
+    // Función para generar botones de filtro
+    function generarBotonesFiltro() {
+        const opciones = [
+            { id: 'noticias', nombre: '📰 NOTICIAS' },
+            { id: 'razas', nombre: '🗿 RAZAS' }
+        ];
+
+        panelFiltros.innerHTML = '<span>🗺️ EXPLORAR:</span>';
+
+        opciones.forEach(opcion => {
+            const boton = document.createElement('button');
+            boton.className = 'btn-reino';
+            boton.textContent = opcion.nombre;
+            if (filtroActivo === opcion.id) {
+                boton.classList.add('activo');
+            }
+            boton.addEventListener('click', () => {
+                if (filtroActivo === opcion.id) return;
+                filtroActivo = opcion.id;
+                document.querySelectorAll('.btn-reino').forEach(btn => btn.classList.remove('activo'));
+                boton.classList.add('activo');
+                renderizarCronicas();
+            });
+            panelFiltros.appendChild(boton);
+        });
+    }
+
+    // Renderiza según el filtro activo
+    function renderizarCronicas() {
+        const datos = filtroActivo === 'noticias' ? noticias : razas;
+
+        tablon.innerHTML = '';
+
+        if (datos.length === 0) {
+            tablon.innerHTML = '<div class="sin-cronicas">📜 No hay crónicas que relatar... el cuervo mensajero aún no llega.</div>';
+            return;
+        }
+
+        datos.forEach((item) => {
+            const tarjeta = document.createElement('article');
+            tarjeta.className = 'pergamino';
+
+            tarjeta.innerHTML = `
+                <img class="imagen-cronica" src="${item.imagen}" alt="${item.titular}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/600x400/2e281c/cfa668?text=Imagen+perdida';">
+                <div class="cuerpo-pergamino">
+                    <h2 class="titulo-cronica">${item.titular}</h2>
+                    <span class="fecha-cronica">${item.mesAno}</span>
+                </div>
+            `;
+
+            tarjeta.addEventListener('click', () => abrirModal(item));
+            tablon.appendChild(tarjeta);
+        });
+    }
+
+    function abrirModal(item) {
+        // Asignar contenido
+        modalImg.src = item.imagen;
+        modalImg.alt = item.titular;
+        modalTitular.textContent = item.titular;
+        modalFecha.textContent = item.mesAno;
+        modalContexto.textContent = item.contexto;
+
+        // Aplicar clase especial si es raza
+        if (item.categoria === 'raza') {
+            modal.classList.add('modal-raza');
+        } else {
+            modal.classList.remove('modal-raza');
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    function cerrarModalFunc() {
+        modal.style.display = 'none';
+    }
+
+    // Event listeners
+    cerrarModal.addEventListener('click', cerrarModalFunc);
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            cerrarModalFunc();
+        }
+    });
+
+    // Evitar scroll del body cuando el modal está abierto
+    modal.addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
+
+    // Inicializar
+    generarBotonesFiltro();
+    renderizarCronicas();
+</script>
+
+<!-- Soporte para imágenes de reemplazo si alguna falla -->
+<script>
+    (function() {
+        const imagenes = document.querySelectorAll('img');
+        imagenes.forEach(img => {
+            img.addEventListener('error', function() {
+                if (!this.src.includes('placehold')) {
+                    this.src = 'https://placehold.co/600x400/2e281c/cfa668?text=Crónica+Perdida';
+                }
+            });
+        });
+    })();
+</script>
+
+</body>
+</html>
